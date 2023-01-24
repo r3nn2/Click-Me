@@ -16,7 +16,8 @@ class CreateClicksTable extends Migration
         Schema::create('clicks', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('click_count');
-            $table->date('created_at');
+            $table->date('created_at')->unique();
+            $table->timestamp('updated_at');
         });
     }
 
