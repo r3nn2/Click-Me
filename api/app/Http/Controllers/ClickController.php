@@ -12,17 +12,19 @@ class ClickController extends Controller
     {
         $date_now = Carbon::now()->format('Y-m-d');
         $click = Click::where('created_at', $date_now)->first();
-        return response()->json(['clicks'=>($click) ? $click->click_count : 0]);
+        return response()->json(['click_count'=>($click) ? $click->click_count : 0]);
     }
 
     public function clicked(Request $request)
     {
         $date_now = Carbon::now()->format('Y-m-d');
         $click = Click::where('created_at', $date_now)->first();
-        if($click)
-            $response = $click->increment('click_count');
-        else
+        if($click) {
+            $click->increment('click_count');
+            $response = $click;
+        } else {
             $response = Click::create(['click_count'=>1,'created_at'=>$date_now]);
-        return response()->json(isset($response->id) ? $response->id : $response);
+        }
+        return response()->json($response);
     }
 }
